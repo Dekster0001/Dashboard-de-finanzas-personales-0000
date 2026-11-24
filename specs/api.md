@@ -153,6 +153,7 @@ Este documento define el catálogo oficial de rutas, métodos HTTP, parámetros 
 
 #### Listar Cuentas
 - **GET** `/api/cuentas`
+- **Query Params opcionales:** `incluirInactivas=true` (por defecto solo retorna cuentas activas).
 - **Acceso:** `USUARIO` o `ADMIN`
 - **Respuesta (200 OK):**
   ```json
@@ -292,6 +293,10 @@ Este documento define el catálogo oficial de rutas, métodos HTTP, parámetros 
   }
   ```
 
+#### Obtener Movimiento por ID
+- **GET** `/api/movimientos/:id`
+- **Descripción:** Retorna el detalle del movimiento si pertenece al inquilino autenticado; responde `404` si no existe o pertenece a otro usuario (defensa IDOR).
+
 #### Registrar Movimiento
 - **POST** `/api/movimientos`
 - **Cuerpo:**
@@ -345,7 +350,7 @@ Este documento define el catálogo oficial de rutas, métodos HTTP, parámetros 
     }
   }
   ```
-  *(Estados: `OK` < 80%, `ALERTA` >= 80%, `EXCEDIDO` > 100%)*
+  *(Estados: `OK` < 80%, `ALERTA` >= 80%, `EXCEDIDO` > 100%, `SIN_PRESUPUESTO` cuando aún no se define límite)*
 
 #### Definir o Modificar Presupuesto
 - **PUT** `/api/presupuestos/:mes`
@@ -391,6 +396,7 @@ Este documento define el catálogo oficial de rutas, métodos HTTP, parámetros 
     "estado": "exito",
     "datos": [
       {
+        "categoriaId": "673cf0031234567890abcdef",
         "categoria": "Alimentación",
         "color": "#EF4444",
         "totalEnCentavos": 4550,
@@ -427,7 +433,9 @@ Este documento define el catálogo oficial de rutas, métodos HTTP, parámetros 
 
 #### Listar Usuarios (Solo ADMIN)
 - **GET** `/api/admin/usuarios`
+- **Query Params opcionales:** `busqueda`, `pagina`, `limite`
 - **Acceso:** Exclusivo `ADMIN` (retorna 403 a `USUARIO`).
+- **Respuesta (200 OK):** `{ estado: "exito", datos: { usuarios: [...], paginacion: { paginaActual, limite, totalRegistros, totalPaginas } } }`
 
 #### Cambiar Rol
 - **PATCH** `/api/admin/usuarios/:id/rol`

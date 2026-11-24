@@ -84,7 +84,7 @@ dashboardRepositorio.obtenerTotalesPorTipo = async (usuarioId, inicioFecha, finF
 
 dashboardRepositorio.obtenerPatrimonioTotal = async (usuarioId) => {
   const cuentas = bdMemoria.cuentas.filter(
-    (c) => String(c.usuarioId) === String(usuarioId) && c.activa
+    (c) => String(c.usuarioId) === String(usuarioId) && c.activo
   );
   return cuentas.reduce((total, c) => total + c.saldoActualEnCentavos, 0);
 };
@@ -261,7 +261,7 @@ async function ejecutarPruebas() {
     usuarioId: usuario1Id,
     nombre: 'Banco Principal',
     saldoActualEnCentavos: 350000,
-    activa: true
+    activo: true
   });
 
   // E1 Camino Feliz: Resumen KPIs, gráfico dona y tendencia 6 meses

@@ -88,7 +88,7 @@ class DashboardRepositorio {
       {
         $match: {
           usuarioId: idObj,
-          activa: true
+          activo: true
         }
       },
       {

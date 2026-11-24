@@ -17,9 +17,10 @@ class CategoriaRepositorio extends RepositorioBase {
    * @param {string} tipo
    */
   async buscarPorNombreYTipo(usuarioId, nombre, tipo) {
+    const nombreEscapado = nombre.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return await this.modelo.findOne({
       usuarioId,
-      nombre: new RegExp(`^${nombre.trim()}$`, 'i'),
+      nombre: new RegExp(`^${nombreEscapado}$`, 'i'),
       tipo
     });
   }

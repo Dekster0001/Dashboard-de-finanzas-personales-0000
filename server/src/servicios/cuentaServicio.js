@@ -8,11 +8,12 @@ import { ErrorApp } from '../utils/ErrorApp.js';
  */
 class CuentaServicio {
   /**
-   * Lista todas las cuentas activas del usuario.
+   * Lista las cuentas del usuario (solo activas por defecto, o todas si incluirInactivas es true).
    * @param {string} usuarioId
+   * @param {boolean} [incluirInactivas=false]
    */
-  async listarCuentas(usuarioId) {
-    return await cuentaRepositorio.listarActivas(usuarioId);
+  async listarCuentas(usuarioId, incluirInactivas = false) {
+    return await cuentaRepositorio.listarActivas(usuarioId, incluirInactivas);
   }
 
   /**
@@ -60,12 +61,12 @@ class CuentaServicio {
   }
 
   /**
-   * Edita el nombre o propiedades de una cuenta.
+   * Edita el nombre, tipo, color o estado activo de una cuenta.
    * @param {string} usuarioId
    * @param {string} id
-   * @param {Object} datos - { nombre, tipo, color }
+   * @param {Object} datos - { nombre, tipo, color, activo }
    */
-  async editarCuenta(usuarioId, id, { nombre, tipo, color }) {
+  async editarCuenta(usuarioId, id, { nombre, tipo, color, activo }) {
     const cuentaExistente = await this.obtenerCuentaPorId(usuarioId, id);
 
     const actualizacion = {};
@@ -87,6 +88,13 @@ class CuentaServicio {
 
     if (color !== undefined) {
       actualizacion.color = color;
+    }
+
+    if (activo !== undefined) {
+      if (typeof activo !== 'boolean') {
+        throw new ErrorApp("El estado 'activo' debe ser booleano.", 400);
+      }
+      actualizacion.activo = activo;
     }
 
     return await cuentaRepositorio.actualizarPorId(usuarioId, id, actualizacion);

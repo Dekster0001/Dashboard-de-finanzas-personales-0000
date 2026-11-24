@@ -20,6 +20,18 @@ class MovimientoControlador {
     }
   }
 
+  async obtenerPorId(req, res, next) {
+    try {
+      const movimiento = await movimientoServicio.obtenerMovimientoPorId(
+        req.usuario.id || req.usuario._id,
+        req.params.id
+      );
+      return responderExito(res, 200, 'Movimiento obtenido', movimiento);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async registrar(req, res, next) {
     try {
       const { tipo, montoEnCentavos, fecha, descripcion, categoriaId, cuentaId } = req.body;

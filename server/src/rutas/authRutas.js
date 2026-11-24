@@ -7,6 +7,7 @@ import {
   validarRestablecerContrasena
 } from '../middlewares/validar.js';
 import { autenticar } from '../middlewares/autenticar.js';
+import { limitadorLogin, limitadorRecuperacion } from '../middlewares/limitadorTasa.js';
 
 const enrutador = Router();
 
@@ -15,11 +16,11 @@ enrutador.post('/registro', validarRegistro, (req, res, next) =>
   authControlador.registro(req, res, next)
 );
 
-enrutador.post('/login', validarLogin, (req, res, next) =>
+enrutador.post('/login', limitadorLogin, validarLogin, (req, res, next) =>
   authControlador.login(req, res, next)
 );
 
-enrutador.post('/olvide-contrasena', validarOlvideContrasena, (req, res, next) =>
+enrutador.post('/olvide-contrasena', limitadorRecuperacion, validarOlvideContrasena, (req, res, next) =>
   authControlador.olvideContrasena(req, res, next)
 );
 

@@ -77,52 +77,44 @@ async function ejecutarSeed() {
     console.log('[Seed] Creando cuentas bancarias y billeteras en Soles (S/.)...');
     const cuentasU1 = await ModeloCuenta.create([
       {
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         nombre: 'BCP - Cuenta Sueldo',
         tipo: 'banco',
         saldoInicialEnCentavos: 350000, // S/. 3,500.00
         saldoActualEnCentavos: 350000,
-        moneda: 'PEN',
         color: '#2563eb',
-        activa: true
+        activo: true
       },
       {
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         nombre: 'Billetera Digital Yape / Plin',
         tipo: 'billetera',
         saldoInicialEnCentavos: 45000, // S/. 450.00
         saldoActualEnCentavos: 45000,
-        moneda: 'PEN',
         color: '#7c3aed',
-        activa: true
+        activo: true
       },
       {
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         nombre: 'Efectivo en Billetera',
         tipo: 'efectivo',
         saldoInicialEnCentavos: 80000, // S/. 800.00
         saldoActualEnCentavos: 80000,
-        moneda: 'PEN',
         color: '#10b981',
-        activa: true
+        activo: true
       }
     ]);
 
     // Cuentas para Usuario 2 (Aislamiento)
     const cuentasU2 = await ModeloCuenta.create([
       {
-        uuid: uuidv4(),
         usuarioId: usuario2._id,
         nombre: 'BBVA - Ahorros Soles',
         tipo: 'banco',
         saldoInicialEnCentavos: 200000, // S/. 2,000.00
         saldoActualEnCentavos: 200000,
-        moneda: 'PEN',
         color: '#0284c7',
-        activa: true
+        activo: true
       }
     ]);
 
@@ -130,24 +122,24 @@ async function ejecutarSeed() {
     console.log('[Seed] Creando categorías financieras...');
     const categoriasU1 = await ModeloCategoria.create([
       // Ingresos
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Sueldo / Nómina', tipo: 'INGRESO', color: '#10b981', icono: 'briefcase' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Proyectos Freelance', tipo: 'INGRESO', color: '#06b6d4', icono: 'laptop' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Rendimientos e Inversiones', tipo: 'INGRESO', color: '#8b5cf6', icono: 'trending-up' },
+      { usuarioId: usuario1._id, nombre: 'Sueldo / Nómina', tipo: 'INGRESO', color: '#10b981' },
+      { usuarioId: usuario1._id, nombre: 'Proyectos Freelance', tipo: 'INGRESO', color: '#06b6d4' },
+      { usuarioId: usuario1._id, nombre: 'Rendimientos e Inversiones', tipo: 'INGRESO', color: '#8b5cf6' },
       // Gastos
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Supermercado y Alimentación', tipo: 'GASTO', color: '#ef4444', icono: 'shopping-cart' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Transporte y Metropolitano', tipo: 'GASTO', color: '#f59e0b', icono: 'car' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Vivienda y Alquiler', tipo: 'GASTO', color: '#6366f1', icono: 'home' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Servicios Básicos (Luz/Agua/Net)', tipo: 'GASTO', color: '#3b82f6', icono: 'zap' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Salud y Farmacia', tipo: 'GASTO', color: '#14b8a6', icono: 'heart' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Restaurantes y Menú Diario', tipo: 'GASTO', color: '#f97316', icono: 'coffee' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Entretenimiento y Ocio', tipo: 'GASTO', color: '#ec4899', icono: 'film' },
-      { uuid: uuidv4(), usuarioId: usuario1._id, nombre: 'Educación y Universidad', tipo: 'GASTO', color: '#a855f7', icono: 'book' }
+      { usuarioId: usuario1._id, nombre: 'Supermercado y Alimentación', tipo: 'GASTO', color: '#ef4444' },
+      { usuarioId: usuario1._id, nombre: 'Transporte y Metropolitano', tipo: 'GASTO', color: '#f59e0b' },
+      { usuarioId: usuario1._id, nombre: 'Vivienda y Alquiler', tipo: 'GASTO', color: '#6366f1' },
+      { usuarioId: usuario1._id, nombre: 'Servicios Básicos (Luz/Agua/Net)', tipo: 'GASTO', color: '#3b82f6' },
+      { usuarioId: usuario1._id, nombre: 'Salud y Farmacia', tipo: 'GASTO', color: '#14b8a6' },
+      { usuarioId: usuario1._id, nombre: 'Restaurantes y Menú Diario', tipo: 'GASTO', color: '#f97316' },
+      { usuarioId: usuario1._id, nombre: 'Entretenimiento y Ocio', tipo: 'GASTO', color: '#ec4899' },
+      { usuarioId: usuario1._id, nombre: 'Educación y Universidad', tipo: 'GASTO', color: '#a855f7' }
     ]);
 
     // Categorías para Usuario 2
     const categoriasU2 = await ModeloCategoria.create([
-      { uuid: uuidv4(), usuarioId: usuario2._id, nombre: 'Sueldo', tipo: 'INGRESO', color: '#10b981', icono: 'briefcase' },
-      { uuid: uuidv4(), usuarioId: usuario2._id, nombre: 'Alimentación', tipo: 'GASTO', color: '#ef4444', icono: 'shopping-cart' }
+      { usuarioId: usuario2._id, nombre: 'Sueldo', tipo: 'INGRESO', color: '#10b981' },
+      { usuarioId: usuario2._id, nombre: 'Alimentación', tipo: 'GASTO', color: '#ef4444' }
     ]);
 
     // Mapas auxiliares para asociación
@@ -176,7 +168,6 @@ async function ejecutarSeed() {
     for (const mesStr of meses) {
       // 1. Ingreso fijo de Sueldo mensual
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaBancoU1._id,
         categoriaId: catSalarioU1._id,
@@ -189,7 +180,6 @@ async function ejecutarSeed() {
 
       // 2. Ingreso Freelance mensual
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaYapeU1._id,
         categoriaId: catFreelanceU1._id,
@@ -202,7 +192,6 @@ async function ejecutarSeed() {
 
       // 3. Gasto de Vivienda / Alquiler
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaBancoU1._id,
         categoriaId: catViviendaU1._id,
@@ -215,7 +204,6 @@ async function ejecutarSeed() {
 
       // 4. Servicios básicos
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaBancoU1._id,
         categoriaId: catServiciosU1._id,
@@ -230,7 +218,6 @@ async function ejecutarSeed() {
       const diasSuper = ['03', '11', '18', '25'];
       for (const dia of diasSuper) {
         listaMovimientos.push({
-          uuid: uuidv4(),
           usuarioId: usuario1._id,
           cuentaId: ctaBancoU1._id,
           categoriaId: catComidaU1._id,
@@ -244,7 +231,6 @@ async function ejecutarSeed() {
 
       // 9-10. Gastos de transporte en Yape
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaYapeU1._id,
         categoriaId: catTransporteU1._id,
@@ -256,7 +242,6 @@ async function ejecutarSeed() {
       acumuladorYape -= 4200;
 
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaYapeU1._id,
         categoriaId: catTransporteU1._id,
@@ -269,7 +254,6 @@ async function ejecutarSeed() {
 
       // 11. Ocio y salidas en efectivo
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaEfectivoU1._id,
         categoriaId: catOcioU1._id,
@@ -282,7 +266,6 @@ async function ejecutarSeed() {
 
       // 12. Salud o farmacia
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaEfectivoU1._id,
         categoriaId: catSaludU1._id,
@@ -295,7 +278,6 @@ async function ejecutarSeed() {
 
       // 13. Reposición o ingreso menor en efectivo
       listaMovimientos.push({
-        uuid: uuidv4(),
         usuarioId: usuario1._id,
         cuentaId: ctaEfectivoU1._id,
         categoriaId: catFreelanceU1._id,
@@ -318,7 +300,6 @@ async function ejecutarSeed() {
     // Movimientos para Usuario 2 (Aislamiento Multiinquilino SaaS)
     await ModeloMovimiento.create([
       {
-        uuid: uuidv4(),
         usuarioId: usuario2._id,
         cuentaId: cuentasU2[0]._id,
         categoriaId: categoriasU2[0]._id,
@@ -328,7 +309,6 @@ async function ejecutarSeed() {
         descripcion: 'Salario Usuario 2'
       },
       {
-        uuid: uuidv4(),
         usuarioId: usuario2._id,
         cuentaId: cuentasU2[0]._id,
         categoriaId: categoriasU2[1]._id,

@@ -31,16 +31,17 @@ export function Cuentas() {
   const [tipo, setTipo] = useState('banco');
   const [saldoInicialDecimal, setSaldoInicialDecimal] = useState('0.00');
   const [color, setColor] = useState('#BFA37C');
-  const [moneda, setMoneda] = useState('PEN');
-  const [activa, setActiva] = useState(true);
+  const [activo, setActivo] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [errorModal, setErrorModal] = useState('');
 
-  // Cargar cuentas del usuario autenticado
+  // Cargar cuentas del usuario autenticado (incluyendo inactivas para poder reactivarlas)
   const cargarCuentas = async () => {
     try {
       setCargando(true);
-      const respuesta = await clienteApi.get('/cuentas');
+      const respuesta = await clienteApi.get('/cuentas', {
+        params: { incluirInactivas: true }
+      });
       setCuentas(respuesta.data.datos || []);
     } catch (error) {
       toast.error('Error al cargar las cuentas.');
@@ -59,8 +60,7 @@ export function Cuentas() {
     setTipo('banco');
     setSaldoInicialDecimal('0.00');
     setColor('#BFA37C');
-    setMoneda('PEN');
-    setActiva(true);
+    setActivo(true);
     setErrorModal('');
     setModalAbierto(true);
   };
@@ -70,8 +70,7 @@ export function Cuentas() {
     setNombre(c.nombre);
     setTipo(c.tipo);
     setColor(c.color || '#BFA37C');
-    setMoneda(c.moneda || 'PEN');
-    setActiva(c.activa !== false);
+    setActivo(c.activo !== false);
     setErrorModal('');
     setModalAbierto(true);
   };
@@ -91,7 +90,7 @@ export function Cuentas() {
         await clienteApi.put(`/cuentas/${cuentaEditar._id || cuentaEditar.id}`, {
           nombre: nombre.trim(),
           color,
-          activa
+          activo
         });
         toast.success('Cuenta actualizada satisfactoriamente.');
       } else {
@@ -100,8 +99,7 @@ export function Cuentas() {
           nombre: nombre.trim(),
           tipo,
           saldoInicialEnCentavos,
-          color,
-          moneda
+          color
         });
         toast.success('Cuenta registrada satisfactoriamente.');
       }
@@ -233,17 +231,17 @@ export function Cuentas() {
                     <div className="flex items-center gap-1.5">
                       <span
                         className={`w-2 h-2 rounded-full ${
-                          c.activa !== false ? 'bg-[#0D9488] ring-2 ring-[#0D9488]/20' : 'bg-slate-300'
+                          c.activo !== false ? 'bg-[#0D9488] ring-2 ring-[#0D9488]/20' : 'bg-slate-300'
                         }`}
                       />
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                          c.activa !== false
+                          c.activo !== false
                             ? 'bg-[#0D9488]/10 text-[#0D9488] border-[#0D9488]/20'
                             : 'bg-slate-100 text-[#627D98] border-slate-200'
                         }`}
                       >
-                        {c.activa !== false ? 'ACTIVA' : 'INACTIVA'}
+                        {c.activo !== false ? 'ACTIVA' : 'INACTIVA'}
                       </span>
                     </div>
                   </div>
@@ -259,12 +257,12 @@ export function Cuentas() {
                         saldoPositivo ? 'text-[#102A43]' : 'text-[#BE123C]'
                       }`}
                     >
-                      {formatearCentavosAMoneda(c.saldoActualEnCentavos, c.moneda)}
+                      {formatearCentavosAMoneda(c.saldoActualEnCentavos)}
                     </span>
                   </div>
 
                   <p className="text-[11px] text-[#627D98] mt-2 font-medium px-1">
-                    Saldo inicial: {formatearCentavosAMoneda(c.saldoInicialEnCentavos, c.moneda)}
+                    Saldo inicial: {formatearCentavosAMoneda(c.saldoInicialEnCentavos)}
                   </p>
                 </div>
 
@@ -351,8 +349,8 @@ export function Cuentas() {
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-[#102A43] mb-1.5">Estado</label>
                 <select
-                  value={activa ? 'true' : 'false'}
-                  onChange={(e) => setActiva(e.target.value === 'true')}
+                  value={activo ? 'true' : 'false'}
+                  onChange={(e) => setActivo(e.target.value === 'true')}
                   className="block w-full rounded-2xl border border-[#9FB3C8]/40 px-4 py-2.5 text-sm text-[#102A43] bg-white outline-none focus:border-[#BFA37C]"
                 >
                   <option value="true">Activa</option>

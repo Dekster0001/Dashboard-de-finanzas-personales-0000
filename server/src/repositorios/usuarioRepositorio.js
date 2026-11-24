@@ -38,6 +38,40 @@ class UsuarioRepositorio {
     return await ModeloUsuario.find(filtros).sort({ creadoEn: -1 });
   }
 
+  /**
+   * Lista usuarios aplicando búsqueda por nombre/correo y paginación para el panel RBAC.
+   */
+  async listarConPaginacion({ busqueda = '', pagina = 1, limite = 10 } = {}) {
+    const consulta = {};
+    if (busqueda && busqueda.trim()) {
+      const textoEscapado = busqueda.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(textoEscapado, 'i');
+      consulta.$or = [{ nombre: regex }, { correo: regex }];
+    }
+
+    const paginaNum = Math.max(1, Number(pagina) || 1);
+    const limiteNum = Math.max(1, Math.min(100, Number(limite) || 10));
+    const saltar = (paginaNum - 1) * limiteNum;
+
+    const [totalRegistros, usuarios] = await Promise.all([
+      ModeloUsuario.countDocuments(consulta),
+      ModeloUsuario.find(consulta)
+        .sort({ creadoEn: -1 })
+        .skip(saltar)
+        .limit(limiteNum)
+    ]);
+
+    return {
+      usuarios,
+      paginacion: {
+        paginaActual: paginaNum,
+        limite: limiteNum,
+        totalRegistros,
+        totalPaginas: Math.ceil(totalRegistros / limiteNum) || 1
+      }
+    };
+  }
+
   async guardar(usuario) {
     return await usuario.save();
   }

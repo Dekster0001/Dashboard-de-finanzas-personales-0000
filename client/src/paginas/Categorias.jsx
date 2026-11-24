@@ -23,7 +23,6 @@ export function Categorias() {
   const [nombre, setNombre] = useState('');
   const [tipo, setTipo] = useState('GASTO');
   const [color, setColor] = useState('#BE123C');
-  const [icono, setIcono] = useState('tag');
   const [guardando, setGuardando] = useState(false);
   const [errorModal, setErrorModal] = useState('');
 
@@ -48,7 +47,6 @@ export function Categorias() {
     setNombre('');
     setTipo('GASTO');
     setColor('#BE123C');
-    setIcono('tag');
     setErrorModal('');
     setModalAbierto(true);
   };
@@ -58,7 +56,6 @@ export function Categorias() {
     setNombre(cat.nombre);
     setTipo(cat.tipo);
     setColor(cat.color || '#BE123C');
-    setIcono(cat.icono || 'tag');
     setErrorModal('');
     setModalAbierto(true);
   };
@@ -77,16 +74,14 @@ export function Categorias() {
       if (categoriaEditar) {
         await clienteApi.put(`/categorias/${categoriaEditar._id || categoriaEditar.id}`, {
           nombre: nombre.trim(),
-          color,
-          icono
+          color
         });
         toast.success('Categoría actualizada satisfactoriamente.');
       } else {
         await clienteApi.post('/categorias', {
           nombre: nombre.trim(),
           tipo,
-          color,
-          icono
+          color
         });
         toast.success('Categoría creada satisfactoriamente.');
       }
@@ -117,8 +112,8 @@ export function Categorias() {
     }).then(async (resultado) => {
       if (resultado.isConfirmed) {
         try {
-          await clienteApi.delete(`/categorias/${cat._id || cat.id}`);
-          toast.success('Categoría eliminada satisfactoriamente.');
+          const respuesta = await clienteApi.delete(`/categorias/${cat._id || cat.id}`);
+          toast.success(respuesta.data?.mensaje || 'Categoría procesada satisfactoriamente.');
           cargarCategorias();
         } catch (error) {
           const mensaje =

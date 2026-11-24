@@ -54,9 +54,19 @@ export function AdminUsuarios() {
     cargarUsuarios();
   }, [cargarUsuarios]);
 
+  const esMismoUsuario = (usuarioFila) => {
+    if (!usuarioFila || !usuarioActual) return false;
+    if (usuarioFila.uuid && usuarioActual.uuid) {
+      return usuarioFila.uuid === usuarioActual.uuid;
+    }
+    if (usuarioFila._id && (usuarioActual._id || usuarioActual.id)) {
+      return usuarioFila._id === (usuarioActual._id || usuarioActual.id);
+    }
+    return false;
+  };
+
   const manejarCambiarRol = (usuarioFila) => {
-    const esElMismo =
-      usuarioFila._id === usuarioActual?.id || usuarioFila.id === usuarioActual?.id;
+    const esElMismo = esMismoUsuario(usuarioFila);
 
     if (esElMismo) {
       Swal.fire({
@@ -88,7 +98,7 @@ export function AdminUsuarios() {
     }).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          await clienteApi.put(`/admin/usuarios/${usuarioFila._id || usuarioFila.id}/rol`, {
+          await clienteApi.patch(`/admin/usuarios/${usuarioFila._id || usuarioFila.uuid}/rol`, {
             rol: nuevoRol
           });
           toast.success(`Rol cambiado a ${nuevoRol} exitosamente.`);
@@ -101,8 +111,7 @@ export function AdminUsuarios() {
   };
 
   const manejarCambiarEstado = (usuarioFila) => {
-    const esElMismo =
-      usuarioFila._id === usuarioActual?.id || usuarioFila.id === usuarioActual?.id;
+    const esElMismo = esMismoUsuario(usuarioFila);
 
     if (esElMismo) {
       Swal.fire({
@@ -137,7 +146,7 @@ export function AdminUsuarios() {
     }).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          await clienteApi.put(`/admin/usuarios/${usuarioFila._id || usuarioFila.id}/estado`, {
+          await clienteApi.patch(`/admin/usuarios/${usuarioFila._id || usuarioFila.uuid}/estado`, {
             activo: nuevoEstado
           });
           toast.success(`Cuenta ${nuevoEstado ? 'activada' : 'desactivada'} correctamente.`);
@@ -153,7 +162,7 @@ export function AdminUsuarios() {
     {
       encabezado: 'Nombre Completo',
       render: (u) => {
-        const esElMismo = u._id === usuarioActual?.id || u.id === usuarioActual?.id;
+        const esElMismo = esMismoUsuario(u);
         return (
           <div className="flex items-center gap-2">
             <span className="font-bold text-[#102A43]">{u.nombre}</span>
@@ -207,7 +216,7 @@ export function AdminUsuarios() {
       encabezado: 'Acciones',
       alineacion: 'center',
       render: (u) => {
-        const esElMismo = u._id === usuarioActual?.id || u.id === usuarioActual?.id;
+        const esElMismo = esMismoUsuario(u);
         return (
           <div className="flex items-center justify-center gap-2">
             <button

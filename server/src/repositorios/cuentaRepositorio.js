@@ -11,11 +11,13 @@ class CuentaRepositorio extends RepositorioBase {
   }
 
   /**
-   * Obtiene todas las cuentas activas del inquilino ordenadas por fecha de creación.
+   * Obtiene las cuentas del inquilino ordenadas por estado y fecha de creación.
    * @param {string|import('mongoose').Types.ObjectId} usuarioId
+   * @param {boolean} [incluirInactivas=false]
    */
-  async listarActivas(usuarioId) {
-    return await this.buscar(usuarioId, { activo: true }, { sort: { creadoEn: 1 } });
+  async listarActivas(usuarioId, incluirInactivas = false) {
+    const filtros = incluirInactivas ? {} : { activo: true };
+    return await this.buscar(usuarioId, filtros, { sort: { activo: -1, creadoEn: 1 } });
   }
 
   /**

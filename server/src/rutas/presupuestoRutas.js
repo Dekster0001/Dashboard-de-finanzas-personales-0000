@@ -26,15 +26,19 @@ enrutador.post('/:mes', validarParametroMes, validarCuerpoPresupuesto, (req, res
   presupuestoControlador.definirPresupuesto(req, res, next)
 );
 
-enrutador.post('/', (req, res, next) => {
+const asignarMesDesdeBody = (req, res, next) => {
   if (req.body.mes) {
     req.params.mes = req.body.mes;
   }
-  validarParametroMes(req, res, () =>
-    validarCuerpoPresupuesto(req, res, () =>
-      presupuestoControlador.definirPresupuesto(req, res, next)
-    )
-  );
-});
+  next();
+};
+
+enrutador.post(
+  '/',
+  asignarMesDesdeBody,
+  validarParametroMes,
+  validarCuerpoPresupuesto,
+  (req, res, next) => presupuestoControlador.definirPresupuesto(req, res, next)
+);
 
 export default enrutador;

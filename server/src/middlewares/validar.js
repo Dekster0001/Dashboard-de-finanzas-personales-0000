@@ -32,7 +32,7 @@ export const validarRegistro = (req, res, next) => {
   }
 
   req.body.nombre = validator.trim(req.body.nombre);
-  req.body.correo = validator.normalizeEmail(req.body.correo.trim()) || req.body.correo.trim();
+  req.body.correo = req.body.correo.trim().toLowerCase();
   next();
 };
 

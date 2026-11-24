@@ -49,7 +49,7 @@ export function RestablecerContrasena() {
     try {
       setCargando(true);
       await clienteApi.post('/auth/restablecer-contrasena', {
-        token,
+        tokenRecuperacion: token,
         nuevaContrasena
       });
 

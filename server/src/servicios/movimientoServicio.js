@@ -32,10 +32,14 @@ class MovimientoServicio {
       throw new ErrorApp("El tipo de movimiento debe ser 'INGRESO' o 'GASTO'.", 400);
     }
 
-    // 3. Validar existencia y pertenencia de la cuenta
+    // 3. Validar existencia, estado activo y pertenencia de la cuenta
     const cuenta = await cuentaRepositorio.buscarPorId(usuarioId, cuentaId);
     if (!cuenta) {
       throw new ErrorApp('La cuenta especificada no existe o no pertenece al usuario.', 404);
+    }
+
+    if (cuenta.activo === false) {
+      throw new ErrorApp(`La cuenta '${cuenta.nombre}' se encuentra inactiva. Reactívela para registrar nuevos movimientos.`, 400);
     }
 
     // 4. Validar existencia y coincidencia de tipo de la categoría (HU-05 E4)
@@ -247,6 +251,19 @@ class MovimientoServicio {
 
     await movimientoRepositorio.eliminarPorId(usuarioId, id);
     return { mensaje: 'Movimiento eliminado y saldo recalculado con éxito.' };
+  }
+
+  /**
+   * Obtiene el detalle de un movimiento verificando pertenencia del usuario (defensa IDOR).
+   * @param {string} usuarioId
+   * @param {string} id
+   */
+  async obtenerMovimientoPorId(usuarioId, id) {
+    const movimiento = await movimientoRepositorio.buscarDetallePorId(usuarioId, id);
+    if (!movimiento) {
+      throw new ErrorApp('Movimiento no encontrado.', 404);
+    }
+    return movimiento;
   }
 
   /**

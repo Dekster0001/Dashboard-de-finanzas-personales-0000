@@ -196,14 +196,43 @@ export function Movimientos() {
     });
   };
 
-  const manejarExportarExcel = () => {
-    const periodo = desde || hasta ? `${desde || 'Inicio'} a ${hasta || 'Fin'}` : 'Historial Completo';
-    exportarMovimientosAExcel(movimientos, `Movimientos_${periodo.replace(/\s+/g, '_')}`);
+  const obtenerMovimientosParaExportar = async () => {
+    if (paginacionInfo.totalRegistros <= movimientos.length) {
+      return movimientos;
+    }
+
+    const params = {
+      pagina: 1,
+      limite: paginacionInfo.totalRegistros
+    };
+    if (desde) params.desde = desde;
+    if (hasta) params.hasta = hasta;
+    if (tipo) params.tipo = tipo;
+    if (categoriaId) params.categoriaId = categoriaId;
+    if (cuentaId) params.cuentaId = cuentaId;
+
+    const respuesta = await clienteApi.get('/movimientos', { params });
+    return respuesta.data?.datos?.movimientos || movimientos;
   };
 
-  const manejarExportarPdf = () => {
-    const periodo = desde || hasta ? `${desde || 'Inicio'} a ${hasta || 'Fin'}` : 'Historial Completo';
-    exportarMovimientosAPdf(movimientos, periodo, 'Reporte_Movimientos');
+  const manejarExportarExcel = async () => {
+    try {
+      const todosLosMovimientos = await obtenerMovimientosParaExportar();
+      const periodo = desde || hasta ? `${desde || 'Inicio'} a ${hasta || 'Fin'}` : 'Historial Completo';
+      exportarMovimientosAExcel(todosLosMovimientos, `Movimientos_${periodo.replace(/\s+/g, '_')}`);
+    } catch {
+      toast.error('No se pudieron obtener todos los movimientos para exportar.');
+    }
+  };
+
+  const manejarExportarPdf = async () => {
+    try {
+      const todosLosMovimientos = await obtenerMovimientosParaExportar();
+      const periodo = desde || hasta ? `${desde || 'Inicio'} a ${hasta || 'Fin'}` : 'Historial Completo';
+      exportarMovimientosAPdf(todosLosMovimientos, periodo, 'Reporte_Movimientos');
+    } catch {
+      toast.error('No se pudieron obtener todos los movimientos para exportar.');
+    }
   };
 
   return (

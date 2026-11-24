@@ -11,8 +11,13 @@ class AdminControlador {
    */
   async listar(req, res, next) {
     try {
-      const usuarios = await adminServicio.listarUsuarios(req.usuario);
-      return responderExito(res, 200, 'Lista de usuarios obtenida', usuarios);
+      const { busqueda, pagina, limite } = req.query;
+      const resultado = await adminServicio.listarUsuarios(req.usuario, {
+        busqueda,
+        pagina,
+        limite
+      });
+      return responderExito(res, 200, 'Lista de usuarios obtenida', resultado);
     } catch (error) {
       next(error);
     }

@@ -8,25 +8,34 @@ import { ErrorApp } from '../utils/ErrorApp.js';
  */
 class AdminServicio {
   /**
-   * Lista todos los usuarios registrados en el sistema.
+   * Lista los usuarios registrados en el sistema con búsqueda y paginación.
    * Solo disponible para el rol ADMIN.
    * @param {Object} usuarioAutenticado - Administrador que realiza la petición
+   * @param {Object} [opciones] - { busqueda, pagina, limite }
    */
-  async listarUsuarios(usuarioAutenticado) {
+  async listarUsuarios(usuarioAutenticado, { busqueda = '', pagina = 1, limite = 10 } = {}) {
     if (!puede(usuarioAutenticado, ACCIONES.LISTAR_USUARIOS)) {
       throw new ErrorApp('No tienes permisos para acceder a este recurso.', 403);
     }
 
-    const usuarios = await usuarioRepositorio.listarTodos();
-    return usuarios.map((u) => ({
-      _id: u._id,
-      uuid: u.uuid,
-      nombre: u.nombre,
-      correo: u.correo,
-      rol: u.rol,
-      activo: u.activo,
-      creadoEn: u.creadoEn
-    }));
+    const { usuarios, paginacion } = await usuarioRepositorio.listarConPaginacion({
+      busqueda,
+      pagina,
+      limite
+    });
+
+    return {
+      usuarios: usuarios.map((u) => ({
+        _id: u._id,
+        uuid: u.uuid,
+        nombre: u.nombre,
+        correo: u.correo,
+        rol: u.rol,
+        activo: u.activo,
+        creadoEn: u.creadoEn
+      })),
+      paginacion
+    };
   }
 
   /**

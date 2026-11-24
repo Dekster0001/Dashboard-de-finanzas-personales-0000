@@ -29,6 +29,19 @@ class MovimientoRepositorio extends RepositorioBase {
   }
 
   /**
+   * Busca un movimiento por ID garantizando aislamiento por usuarioId, con relaciones pobladas.
+   * @param {string|import('mongoose').Types.ObjectId} usuarioId
+   * @param {string} id
+   */
+  async buscarDetallePorId(usuarioId, id) {
+    this._validarUsuarioId(usuarioId);
+    return await this.modelo
+      .findOne({ _id: id, usuarioId })
+      .populate('categoriaId', 'nombre tipo color')
+      .populate('cuentaId', 'nombre tipo color');
+  }
+
+  /**
    * Busca movimientos con filtros combinados, orden cronológico descendente y paginación.
    * @param {string|import('mongoose').Types.ObjectId} usuarioId
    * @param {Object} filtros - { desde, hasta, tipo, categoriaId, cuentaId }

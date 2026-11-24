@@ -4,7 +4,8 @@ import { responderExito } from '../utils/respuestas.js';
 class CuentaControlador {
   async listar(req, res, next) {
     try {
-      const cuentas = await cuentaServicio.listarCuentas(req.usuario.id || req.usuario._id);
+      const incluirInactivas = req.query.incluirInactivas === 'true';
+      const cuentas = await cuentaServicio.listarCuentas(req.usuario.id || req.usuario._id, incluirInactivas);
       return responderExito(res, 200, 'Lista de cuentas obtenida', cuentas);
     } catch (error) {
       next(error);
@@ -37,11 +38,11 @@ class CuentaControlador {
 
   async editar(req, res, next) {
     try {
-      const { nombre, tipo, color } = req.body;
+      const { nombre, tipo, color, activo } = req.body;
       const cuentaActualizada = await cuentaServicio.editarCuenta(
         req.usuario.id || req.usuario._id,
         req.params.id,
-        { nombre, tipo, color }
+        { nombre, tipo, color, activo }
       );
       return responderExito(res, 200, 'Cuenta actualizada exitosamente', cuentaActualizada);
     } catch (error) {

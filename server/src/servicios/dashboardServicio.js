@@ -58,6 +58,7 @@ class DashboardServicio {
     );
 
     return categoriasAgrupadas.map(cat => ({
+      categoriaId: cat.categoriaId,
       categoria: cat.categoria,
       color: cat.color,
       totalEnCentavos: cat.totalEnCentavos,

@@ -312,7 +312,7 @@ export function Presupuesto() {
               const pctPresupuesto = limite > 0 ? ((cat.totalEnCentavos / limite) * 100).toFixed(1) : 0;
               return (
                 <div
-                  key={cat.categoriaId}
+                  key={cat.categoriaId || cat.categoria}
                   className="p-4 bg-[#F3EEE6]/50 hover:bg-white rounded-2.5xl border border-[#9FB3C8]/30 transition-all duration-200 shadow-sm hover:shadow-md flex flex-col justify-between gap-3 group"
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -322,7 +322,7 @@ export function Presupuesto() {
                         style={{ backgroundColor: cat.color || '#BFA37C' }}
                       />
                       <span className="text-xs font-bold text-[#102A43] truncate">
-                        {cat.nombre}
+                        {cat.categoria}
                       </span>
                     </div>
                     <span className="text-xs font-mono font-black text-[#102A43] flex-shrink-0">

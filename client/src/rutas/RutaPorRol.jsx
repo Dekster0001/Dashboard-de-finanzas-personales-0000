@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexto/ContextoAuth.jsx';
 import Swal from 'sweetalert2';
@@ -10,6 +10,18 @@ import Swal from 'sweetalert2';
  */
 export function RutaPorRol({ rolesPermitidos = [] }) {
   const { usuario, cargando } = useAuth();
+  const sinPermiso = !cargando && Boolean(usuario) && !rolesPermitidos.includes(usuario.rol);
+
+  useEffect(() => {
+    if (sinPermiso) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Acceso Denegado',
+        text: 'No tienes los permisos requeridos para acceder a este módulo administrativo.',
+        confirmButtonColor: '#2563eb'
+      });
+    }
+  }, [sinPermiso]);
 
   if (cargando) {
     return (
@@ -23,13 +35,7 @@ export function RutaPorRol({ rolesPermitidos = [] }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!rolesPermitidos.includes(usuario.rol)) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Acceso Denegado',
-      text: 'No tienes los permisos requeridos para acceder a este módulo administrativo.',
-      confirmButtonColor: '#2563eb'
-    });
+  if (sinPermiso) {
     return <Navigate to="/dashboard" replace />;
   }
 

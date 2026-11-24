@@ -23,16 +23,23 @@ function normalizarMongoUri(uri) {
   return normalizada;
 }
 
+const nodoEntorno = process.env.NODE_ENV || 'development';
+const jwtSecreto = process.env.JWT_SECRETO || (nodoEntorno === 'production' ? '' : 'secreto_desarrollo_temporal_2026');
+
+if (nodoEntorno === 'production' && !jwtSecreto) {
+  throw new Error('Configuración crítica faltante: la variable JWT_SECRETO es obligatoria en producción.');
+}
+
 /**
  * Configuración centralizada de variables de entorno del servidor.
  * Proporciona valores por defecto seguros en entorno de desarrollo.
  */
 export const entorno = {
   puerto: process.env.PUERTO || 5000,
-  nodoEntorno: process.env.NODE_ENV || 'development',
+  nodoEntorno,
   mongoUri: normalizarMongoUri(process.env.MONGODB_URI),
   clienteUrl: process.env.CLIENT_URL || 'http://localhost:5173',
-  jwtSecreto: process.env.JWT_SECRETO || 'secreto_desarrollo_temporal_2026',
+  jwtSecreto,
   jwtExpira: process.env.JWT_EXPIRA || '1h',
   correoHost: process.env.CORREO_HOST || 'smtp.gmail.com',
   correoPuerto: Number(process.env.CORREO_PUERTO) || 587,
