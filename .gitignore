@@ -1,0 +1,27 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno sensibles
+.env
+.env.local
+.env.*.local
+
+# Salidas de compilación
+dist/
+build/
+
+# Registros del sistema
+logs/
+*.log
+npm-debug.log*
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Archivos de guías y notas internas de desarrollo (excluidos de GitHub)
+word.md
+guias/
+reportes/

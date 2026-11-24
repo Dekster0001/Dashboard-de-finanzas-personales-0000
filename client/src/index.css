@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    background-color: #F3EEE6; /* Lienzo marfil alabastro cálido */
+    color: #102A43; /* Azul medianoche profundo de alta legibilidad */
+  }
+}
+
+/* Scrollbar estilizada y moderna en tono pizarra suave */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9FB3C8;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #627D98;
+}
+
+/* Tarjeta flotante Soft UI con sombra difusa basada en #102A43 */
+.tarjeta-flotante {
+  background-color: #FFFFFF;
+  border-radius: 1.5rem; /* rounded-3xl */
+  box-shadow: 0 10px 30px -5px rgba(16, 42, 67, 0.05), 0 20px 40px -10px rgba(16, 42, 67, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tarjeta-flotante:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 45px -8px rgba(16, 42, 67, 0.08), 0 10px 20px -4px rgba(16, 42, 67, 0.03);
+}
+
+/* Botón flotante estilo píldora */
+.boton-pildora {
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.boton-pildora:hover {
+  transform: translateY(-1px);
+}
